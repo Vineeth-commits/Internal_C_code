@@ -21,15 +21,13 @@ int word_doc_counts[MAX_WORDS] = {0};
 double tfidf[MAX_DOCS][MAX_WORDS];
 
 void read_words(char *filename) {
-    FILE *fp = fopen(filename, "r");
+    FILE *fp = fopen(filename, "rb");
     if (fp == NULL) {
         printf("Error: could not open file %s\\n", filename);
         exit(1);
     }
     char word[100];
-    while (fgets(word, 100, fp) != NULL) {
-        // Remove trailing newline character
-        word[strcspn(word, "\\n")] = 0;
+	while (fscanf(fp, "%[^\\n]\\n", word) != EOF) {
         int i;
         for (i = 0; i < num_words; i++) {
             if (strcmp(words[i], word) == 0) {
@@ -45,7 +43,6 @@ void read_words(char *filename) {
     }
     fclose(fp);
 }
-
 void read_docs(char *filename) {
     FILE *fp = fopen(filename, "r");
     if (fp == NULL) {
